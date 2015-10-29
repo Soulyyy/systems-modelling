@@ -1,12 +1,15 @@
 package validation;
 
+import java.util.List;
+
 /**
  * Created by Hans on 29/10/2015.
  */
 public class PetriNet {
 
 
-  Transition[] transitions;
+  List<Transition> transitions;
+  List<Place> places;
   Trace[] traces;
 
   public void mapStuff(EventLog eventLog) {
