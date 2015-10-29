@@ -13,10 +13,10 @@ public class PetriNet {
   Trace[] traces;
 
   public void mapStuff(EventLog eventLog) {
-    Case[] cases = eventLog.getCases();
+    List<Case> cases = eventLog.getCases();
     for(Case caseObj : cases) {
       Trace trace = caseObj.getTrace();
-      Event[] events = trace.getEvents();
+      List<Event> events = trace.getEvents();
       for(Event event : events) {
         for(Transition transition : transitions) {
           if(event.transition == null && event.name != null && event.name.equals(transition.name)) {
