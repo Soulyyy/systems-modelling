@@ -1,5 +1,7 @@
 package validation;
 
+import java.util.List;
+
 /**
  * Created by Hans on 29/10/2015.
  */
@@ -11,9 +13,16 @@ public class Trace {
   private int consumedTokens;
   private int producedTokens;
 
-  Event[] events;
+  private int id;
 
-  public Event[] getEvents() {
+    List<Event> events;
+
+  public Trace(int id, List<Event> events){
+    this.id = id;
+    this.events = events;
+  }
+
+  public List<Event> getEvents() {
     return events;
   }
 }

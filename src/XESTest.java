@@ -6,6 +6,7 @@ import org.deckfour.xes.model.XAttributeMap;
 import org.deckfour.xes.model.XEvent;
 import org.deckfour.xes.model.XLog;
 import org.deckfour.xes.model.XTrace;
+import validation.XLogReader;
 
 public class XESTest {
 

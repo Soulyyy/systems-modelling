@@ -1,5 +1,12 @@
 package validation;
 
+import org.deckfour.xes.extension.std.XConceptExtension;
+import org.deckfour.xes.extension.std.XLifecycleExtension;
+import org.deckfour.xes.extension.std.XTimeExtension;
+import org.deckfour.xes.model.XAttributeMap;
+import org.deckfour.xes.model.XEvent;
+import org.deckfour.xes.model.XLog;
+import org.deckfour.xes.model.XTrace;
 import org.processmining.models.connections.GraphLayoutConnection;
 import org.processmining.models.graphbased.AbstractGraphEdge;
 import org.processmining.models.graphbased.directed.petrinet.PetrinetEdge;
@@ -32,12 +39,10 @@ public class ConformanceChecker {
     //Sanity checks, whether we are dealing with same objects
     petriNet.startingPlace.outTransitions.stream().forEach(i -> i.inPlaces.stream().forEach(System.out::println));
     System.out.println(petriNet.startingPlace == petriNet.startingPlace.outTransitions.get(0).inPlaces.get(0));
-    EventLog eventLog = new EventLog();
+    EventLog eventLog = getEventLog(args[1]);
     petriNet.mapStuff(eventLog);
 
-    List<Trace> traces = Arrays.stream(eventLog.getCases()).map(Case::getTrace).collect(Collectors.toList());
-
-    recursiveMethod();
+    /*traces = Arrays.stream(eventLog.getCases()).map(Case::getTrace).collect(Collectors.toList());*/
   }
 
   public static LogResult recursiveMethod() {
@@ -156,4 +161,41 @@ public class ConformanceChecker {
     }
     return petriNet;
   }
+
+  public static EventLog getEventLog(String inputFile) {
+    Map<String, Trace> traces = new HashMap<>();
+    List<Case> cases = new ArrayList<Case>();
+    try {
+      XLog log = XLogReader.openLog(inputFile);
+      for (XTrace trace : log) {
+        String traceName = XConceptExtension.instance().extractName(trace);
+        System.out.println(traceName);
+        XAttributeMap caseAttributes = trace.getAttributes();
+        System.out.println(caseAttributes.keySet());
+        List<Event> events = new ArrayList<Event>();
+        Map<String, String> caseAttrs = new HashMap<>();
+        for (XEvent event : trace) {
+          String activityName = XConceptExtension.instance().extractName(event);
+          Date timestamp = XTimeExtension.instance().extractTimestamp(event);
+          String eventType = XLifecycleExtension.instance().extractTransition(event);
+          XAttributeMap eventAttributes = event.getAttributes();
+          Map<String, String> eventAttrs = new HashMap<>();
+          for (String key : eventAttributes.keySet()) {
+            eventAttrs.put(key, eventAttributes.get(key).toString());
+          }
+          for (String key : caseAttributes.keySet()) {
+            caseAttrs.put(key, caseAttributes.get(key).toString());
+          }
+          events.add(new Event(activityName, timestamp, eventAttrs));
+        }
+        Trace ourTrace = new Trace(Integer.parseInt(traceName), events);
+        cases.add(new Case(ourTrace, caseAttrs));
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    return new EventLog(cases);
+  }
 }
+
+
