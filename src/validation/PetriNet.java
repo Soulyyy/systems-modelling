@@ -101,6 +101,10 @@ public class PetriNet {
   @Override
   public String toString() {
     String resp = "";
+<<<<<<< HEAD
+=======
+    return resp;
+>>>>>>> a3e11d3e38e773b0c1a4d529bd144b813987c1d1
   }
 
 }

@@ -25,13 +25,12 @@ public class Trace {
   @Override
   public String toString() {
     return "Trace {" +
-        "events="+events+
+        "events=" + events +
         ", totalTraces=" + totalTraces +
         ", missingTokens=" + missingTokens +
         ", remainingTokens=" + remainingTokens +
         ", consumedTokens=" + consumedTokens +
         ", producedTokens=" + producedTokens +
-        "[" + events.stream().map(Object::toString).reduce((j, h) -> j + " " + h) + "]" +
         '}';
   }
 }
