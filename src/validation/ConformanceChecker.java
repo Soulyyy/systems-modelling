@@ -168,13 +168,13 @@ public class ConformanceChecker {
       XLog log = XLogReader.openLog(inputFile);
       for (XTrace trace : log) {
         String traceName = XConceptExtension.instance().extractName(trace);
-        System.out.println(traceName);
         XAttributeMap caseAttributes = trace.getAttributes();
-        System.out.println(caseAttributes.keySet());
         List<Event> events = new ArrayList<Event>();
         Map<String, String> caseAttrs = new HashMap<>();
+        String traceAbr = "";
         for (XEvent event : trace) {
           String activityName = XConceptExtension.instance().extractName(event);
+          traceAbr += activityName;
           Date timestamp = XTimeExtension.instance().extractTimestamp(event);
           String eventType = XLifecycleExtension.instance().extractTransition(event);
           XAttributeMap eventAttributes = event.getAttributes();
@@ -187,12 +187,15 @@ public class ConformanceChecker {
           }
           events.add(new Event(activityName, timestamp, eventAttrs));
         }
-        Trace ourTrace = new Trace(Integer.parseInt(traceName), events);
-        cases.add(new Case(ourTrace, caseAttrs));
+        if(traces.get(traceAbr) == null){
+          traces.put(traceAbr, new Trace(events));
+        }
+        cases.add(new Case(Integer.parseInt(traceName), traces.get(traceAbr), caseAttrs));
       }
     } catch (Exception e) {
       e.printStackTrace();
     }
+    cases.stream().forEach(System.out::println);
     return new EventLog(cases);
   }
 

@@ -13,7 +13,6 @@ public class EventLog {
       this.cases = cases;
   }
 
-
   public List<Case> getCases() {
     return cases;
   }

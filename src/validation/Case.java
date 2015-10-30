@@ -8,13 +8,23 @@ import java.util.Map;
 public class Case {
   private Trace trace;
   private Map<String, String> attributes;
+  private int id;
 
-  public Case(Trace trace, Map<String,String> attributes){
+  public Case(int id, Trace trace, Map<String,String> attributes){
+      this.id = id;
       this.trace = trace;
       this.attributes = attributes;
   }
 
   public Trace getTrace() {
     return trace;
+  }
+
+  public String toString() {
+    return "Case {"+
+        "id="+id+
+        ", trace=" +trace +
+        ", attributes="+attributes+
+        "}";
   }
 }

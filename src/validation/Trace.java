@@ -13,12 +13,8 @@ public class Trace {
   public int consumedTokens;
   public int producedTokens;
 
-  private int id;
-
   List<Event> events;
-
-  public Trace(int id, List<Event> events) {
-    this.id = id;
+  public Trace(List<Event> events){
     this.events = events;
   }
 
@@ -28,15 +24,14 @@ public class Trace {
 
   @Override
   public String toString() {
-    return "Trace{" +
-        "totalTraces=" + totalTraces +
+    return "Trace {" +
+        "events="+events+
+        ", totalTraces=" + totalTraces +
         ", missingTokens=" + missingTokens +
         ", remainingTokens=" + remainingTokens +
         ", consumedTokens=" + consumedTokens +
         ", producedTokens=" + producedTokens +
-        ", id=" + id +
         "[" + events.stream().map(Object::toString).reduce((j, h) -> j + " " + h) + "]" +
         '}';
   }
-
 }
