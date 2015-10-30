@@ -7,15 +7,15 @@ import java.util.List;
  */
 public class Trace {
 
-  public int totalTraces;
-  public int missingTokens;
-  public int remainingTokens;
-  public int consumedTokens;
-  public int producedTokens;
+  protected int totalTraces;
+  protected int missingTokens;
+  protected int remainingTokens;
+  protected int consumedTokens;
+  protected int producedTokens;
 
-  public int numberIterations;
-  public int numberFirings;
-  List<Event> events;
+  protected int numberIterations;
+  protected int numberFirings;
+  protected List<Event> events;
 
   public Trace(List<Event> events) {
     this.events = events;

@@ -1,7 +1,6 @@
 package validation;
 
 import org.deckfour.xes.extension.std.XConceptExtension;
-import org.deckfour.xes.extension.std.XLifecycleExtension;
 import org.deckfour.xes.extension.std.XTimeExtension;
 import org.deckfour.xes.model.XAttributeMap;
 import org.deckfour.xes.model.XEvent;
@@ -137,8 +136,6 @@ public class ConformanceChecker {
           petriNet.endingPlace = placeObject;
         }
       }
-      //All nodes have hit cache, so we can do this
-      petriNet.transitions = transitionObjectCache.values().stream().collect(Collectors.toList());
     } catch (Exception e) {
       e.printStackTrace();
     }

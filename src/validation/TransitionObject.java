@@ -8,21 +8,14 @@ import java.util.List;
  */
 public class TransitionObject {
 
-  String name;
-
-  Event event;
+  protected String name;
 
   //These lists  represent directed edges
-  List<PlaceObject> inPlaces;
-  List<PlaceObject> outPlaces;
+  protected List<PlaceObject> inPlaces;
+  protected List<PlaceObject> outPlaces;
 
   public TransitionObject(String name) {
-    this(name, null);
-  }
-
-  public TransitionObject(String name, Event event) {
     this.name = name;
-    this.event = event;
     this.inPlaces = new ArrayList<>();
     this.outPlaces = new ArrayList<>();
   }

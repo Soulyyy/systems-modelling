@@ -10,9 +10,7 @@ import java.util.stream.Collectors;
  */
 public class PetriNet {
 
-  List<TransitionObject> transitions;
-
-  int placeCount;
+  public int placeCount;
   public int transitionCount;
   public int labelCount;
 
@@ -69,8 +67,9 @@ public class PetriNet {
         trace.missingTokens++;
       }
     }
-    if (this.endingPlace.canFire()) {
+    if (this.endingPlace.token.activated) {
       trace.producedTokens++;
+      trace.consumedTokens++;
     }
     endingPlace.token.consumeToken();
     trace.remainingTokens = (int) tokens.stream().filter(Token::isActivated).count();
