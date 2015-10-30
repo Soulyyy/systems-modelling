@@ -48,7 +48,7 @@ public class PetriNet {
     this.startPlace.token = new Token(tokenId);
 
     List<Token> tokens = new LinkedList<>();
-    List<Event> events = trace.events;
+    List<Event> events = trace.getEvents();
     //We initialize with starting place
     List<PlaceObject> placeObjects = new ArrayList<>();
     placeObjects.add(this.startPlace);

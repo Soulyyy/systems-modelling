@@ -15,7 +15,7 @@ public class Trace {
 
   protected int iterationsNumber;
   protected int firingsNumber;
-  protected List<Event> events;
+ private List<Event> events;
 
   public Trace(List<Event> events) {
     this.events = events;
@@ -48,6 +48,10 @@ public class Trace {
     if (events != null ? !events.equals(trace.events) : trace.events != null) return false;
 
     return true;
+  }
+
+  public List<Event> getEvents() {
+    return events;
   }
 
   @Override
