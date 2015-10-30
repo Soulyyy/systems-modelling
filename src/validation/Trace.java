@@ -21,10 +21,6 @@ public class Trace {
     this.events = events;
   }
 
-  public List<Event> getEvents() {
-    return events;
-  }
-
   @Override
   public String toString() {
     return "Trace {" +

@@ -32,42 +32,23 @@ import java.util.stream.Collectors;
  * Created by Hans on 29/10/2015.
  */
 public class ConformanceChecker {
-  static Trace[] traces;
-  static PetriNet petriNet;
 
   public static void main(String[] args) {
     PetriNet petriNet = getPetriNet(args[0]);
-    //Sanity checks, whether we are dealing with same objects
-    //petriNet.startingPlace.outTransitions.stream().forEach(i -> i.inPlaces.stream().forEach(System.out::println));
-    System.out.println(petriNet.startingPlace == petriNet.startingPlace.outTransitions.get(0).inPlaces.get(0));
     EventLog eventLog = getEventLog(args[1]);
-    petriNet.mapStuff(eventLog);
+
     for (Trace trace : eventLog.getTraces()) {
       trace = petriNet.iterateTrace(trace);
-      System.out.println(trace);
     }
-    System.out.println(computeFitness(eventLog.getTraces()));
-    System.out.println(computeBehavioralAppropriateness(eventLog, petriNet));
-    System.out.println(computeSimpleStructuralAppropriateness(eventLog, petriNet));
-    //petriNet.startingPlace.outTransitions.stream().forEach(i -> i.outPlaces.stream().forEach(j -> j.outTransitions.forEach(h -> h.outPlaces.forEach(t -> t.outTransitions.forEach(u -> u.outPlaces.forEach(o -> o.outTransitions.forEach(p -> p.outPlaces.forEach(System.out::println))))))));
 
-    /*traces = Arrays.stream(eventLog.getCases()).map(Case::getTrace).collect(Collectors.toList());*/
+    System.out.println("Fitness: " + computeFitness(eventLog));
+    System.out.println("Simple Behavioral Appropriateness: " +computeBehavioralAppropriateness(eventLog, petriNet));
+    System.out.println("Simple Structural Appropriateness: " +computeSimpleStructuralAppropriateness(eventLog, petriNet));
   }
 
-  public static void traverseNet(PetriNet net, Trace trace) {
-    net.iterate(trace);
-    System.out.println(trace.consumedTokens);
-    System.out.println(trace.missingTokens);
-  }
-
-  public static String calculateConformance() {
-    return "TERE";
-  }
 
   public static PetriNet getPetriNet(String fileLocation) {
-
     //Initialize parser
-
     PetriNet petriNet = new PetriNet();
     File file = new File(fileLocation);
     try (InputStream inputStream = new FileInputStream(file)) {
@@ -155,7 +136,6 @@ public class ConformanceChecker {
         if (isLast) {
           petriNet.endingPlace = placeObject;
         }
-
       }
       //All nodes have hit cache, so we can do this
       petriNet.transitions = transitionObjectCache.values().stream().collect(Collectors.toList());
@@ -168,7 +148,7 @@ public class ConformanceChecker {
 
   public static EventLog getEventLog(String inputFile) {
     Map<String, Trace> traces = new HashMap<>();
-    List<Case> cases = new ArrayList<Case>();
+    List<Case> cases = new ArrayList<>();
     try {
       XLog log = XLogReader.openLog(inputFile);
       for (XTrace trace : log) {
@@ -181,7 +161,6 @@ public class ConformanceChecker {
           String activityName = XConceptExtension.instance().extractName(event);
           traceAbr += activityName;
           Date timestamp = XTimeExtension.instance().extractTimestamp(event);
-          String eventType = XLifecycleExtension.instance().extractTransition(event);
           XAttributeMap eventAttributes = event.getAttributes();
           Map<String, String> eventAttrs = new HashMap<>();
           for (String key : eventAttributes.keySet()) {
@@ -200,7 +179,6 @@ public class ConformanceChecker {
     } catch (Exception e) {
       e.printStackTrace();
     }
-    cases.stream().forEach(System.out::println);
     return new EventLog(cases);
   }
 

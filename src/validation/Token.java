@@ -8,14 +8,6 @@ public class Token {
   boolean activated = false;
   public int id = 0;
 
-  public Token(boolean activated) {
-    this.activated = activated;
-  }
-
-  public Token() {
-    this.activated = true;
-  }
-
   public Token(int id) {
     this.id = id;
     this.activated = true;

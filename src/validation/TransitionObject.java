@@ -16,10 +16,6 @@ public class TransitionObject {
   List<PlaceObject> inPlaces;
   List<PlaceObject> outPlaces;
 
-  public TransitionObject() {
-
-  }
-
   public TransitionObject(String name) {
     this(name, null);
   }
@@ -29,12 +25,6 @@ public class TransitionObject {
     this.event = event;
     this.inPlaces = new ArrayList<>();
     this.outPlaces = new ArrayList<>();
-  }
-
-  public TransitionObject(String name, List<PlaceObject> in, List<PlaceObject> out) {
-    this.name = name;
-    this.inPlaces = in;
-    this.outPlaces = out;
   }
 
   public void addInPlace(PlaceObject place) {

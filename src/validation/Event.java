@@ -9,7 +9,6 @@ import java.util.Map;
 public class Event {
 
   String name;
-  TransitionObject transition;
   Map<String,String> attributes;
   Date timestamp;
 
@@ -17,14 +16,6 @@ public class Event {
         this.name = name;
         this.timestamp = timestamp;
         this.attributes = attributes;
-    }
-
-    public TransitionObject getTransition() {
-        return transition;
-    }
-
-    public void setTransition(TransitionObject transition) {
-        this.transition = transition;
     }
 
   @Override

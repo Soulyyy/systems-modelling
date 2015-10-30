@@ -36,17 +36,6 @@ public class PlaceObject {
     return tokenCount >= 1;
   }
 
-  public void addToken() {
-    this.tokenCount++;
-  }
-
-  public void consumeToken() throws IllegalStateException {
-    if (this.tokenCount <= 0) {
-      throw new IllegalStateException("No tokens to use");
-    }
-    this.tokenCount--;
-  }
-
   @Override
   public String toString() {
     return name;

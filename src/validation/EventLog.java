@@ -14,10 +14,6 @@ public class EventLog {
       this.cases = cases;
   }
 
-  public List<Case> getCases() {
-    return cases;
-  }
-
   public List<Trace> getTraces() {
     Map<Trace, Integer> traceMap = new HashMap<>();
     cases.forEach(i -> traceMap.put(i.getTrace(), traceMap.get(i.getTrace())== null ? 1 : traceMap.get(i.getTrace())+1));

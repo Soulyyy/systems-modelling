@@ -11,8 +11,6 @@ import java.util.stream.Collectors;
 public class PetriNet {
 
   List<TransitionObject> transitions;
-  List<PlaceObject> places;
-  Trace[] traces;
 
   int placeCount;
   public int transitionCount;
@@ -20,31 +18,6 @@ public class PetriNet {
 
   public PlaceObject startingPlace;
   public PlaceObject endingPlace;
-
-  public void mapStuff(EventLog eventLog) {
-    List<Case> cases = eventLog.getCases();
-    for (Case caseObj : cases) {
-      Trace trace = caseObj.getTrace();
-      List<Event> events = trace.getEvents();
-      for (Event event : events) {
-        for (TransitionObject transition : transitions) {
-          if (event.transition == null && event.name != null && event.name.equals(transition.name)) {
-            System.out.println("MA PEAN VIST PRINTIMA");
-            System.out.println("MIDA VITTU SEE ASI TEEB?");
-          }
-        }
-      }
-    }
-    setTransitions();
-  }
-
-  public void setTransitions() {
-
-  }
-
-  public LogResult iterate(Trace trace) {
-    return new LogResult();
-  }
 
   public Trace iterateTrace(Trace trace) {
     if (this.startingPlace == null) {
@@ -57,7 +30,6 @@ public class PetriNet {
     List<Token> tokens = new LinkedList<>();
     List<Event> events = trace.events;
     //We initialize with starting place
-    //PlaceObject cur = this.startingPlace;
     List<PlaceObject> placeObjects = new ArrayList<>();
     placeObjects.add(this.startingPlace);
     for (Event event : events) {
@@ -72,7 +44,6 @@ public class PetriNet {
             found = true;
             //consume all input tokens
             transition.inPlaces.stream().forEach(i -> i.token.consumeToken());
-            //TODO does this work?
             trace.producedTokens += transition.inPlaces.size();
             cur.token.consumeToken();
             Token token = new Token(tokenId);
@@ -102,7 +73,6 @@ public class PetriNet {
       trace.producedTokens++;
     }
     endingPlace.token.consumeToken();
-    tokens.forEach(i -> System.out.println(i.activated));
     trace.remainingTokens = (int) tokens.stream().filter(Token::isActivated).count();
     //trace.remainingTokens = this.placeCount - trace.producedTokens;
     return trace;
