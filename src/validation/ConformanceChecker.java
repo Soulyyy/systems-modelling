@@ -32,23 +32,31 @@ import java.util.stream.Collectors;
  */
 public class ConformanceChecker {
 
+  private static PetriNet petriNet;
+  private static EventLog eventLog;
+
   public static void main(String[] args) {
-    PetriNet petriNet = getPetriNet(args[0]);
-    EventLog eventLog = getEventLog(args[1]);
+    petriNet = getPetriNet(args[0]);
+    eventLog = getEventLog(args[1]);
 
     for (Trace trace : eventLog.getTraces()) {
       petriNet.iterateTrace(trace);
     }
 
     System.out.println("Fitness: " + computeFitness(eventLog));
-    System.out.println("Simple Behavioral Appropriateness: " + computeBehavioralAppropriateness(eventLog, petriNet));
-    System.out.println("Simple Structural Appropriateness: " + computeSimpleStructuralAppropriateness(eventLog, petriNet));
+    System.out.println("Simple Behavioral Appropriateness: " +computeBehavioralAppropriateness(eventLog));
+    System.out.println("Simple Structural Appropriateness: " +computeSimpleStructuralAppropriateness(eventLog));
   }
 
 
   public static PetriNet getPetriNet(String fileLocation) {
+    int placeCount = 0;
+    int transitionCount = 0;
+    int labelCount = 0;
+    PlaceObject endingPlace = null;
+    PlaceObject startingPlace = null;
+
     //Initialize parser
-    PetriNet petriNet = new PetriNet();
     File file = new File(fileLocation);
     try (InputStream inputStream = new FileInputStream(file)) {
       XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
@@ -70,10 +78,9 @@ public class ConformanceChecker {
       Marking marking = new Marking();
       pnml.convertToNet(net, marking, new GraphLayoutConnection(net));
       Collection<Place> places = net.getPlaces();
-      petriNet.placeCount = places.size();
-      petriNet.transitionCount = net.getTransitions().size();
-      petriNet.labelCount = net.getTransitions().stream().map(AbstractGraphElement::getLabel).collect(Collectors.toSet()).size();
-
+      placeCount = places.size();
+      transitionCount = net.getTransitions().size();
+      labelCount = net.getTransitions().stream().map(AbstractGraphElement::getLabel).collect(Collectors.toSet()).size();
       //Helper functions
       Function<PetrinetEdge<? extends PetrinetNode, ? extends PetrinetNode>, PetrinetNode> mapInEdges = AbstractGraphEdge::getSource;
       Function<PetrinetEdge<? extends PetrinetNode, ? extends PetrinetNode>, PetrinetNode> mapOutEdges = AbstractGraphEdge::getTarget;
@@ -130,17 +137,17 @@ public class ConformanceChecker {
         }
 
         if (isFirst) {
-          petriNet.startingPlace = placeObject;
+          startingPlace = placeObject;
         }
         if (isLast) {
-          petriNet.endingPlace = placeObject;
+          endingPlace = placeObject;
         }
       }
     } catch (Exception e) {
       e.printStackTrace();
     }
 
-    return petriNet;
+    return new PetriNet(placeCount, transitionCount, labelCount,startingPlace,endingPlace);
   }
 
   public static EventLog getEventLog(String inputFile) {
@@ -188,15 +195,15 @@ public class ConformanceChecker {
     return (1 - ((double) missingTokens / consumedTokens)) * 0.5 + (1 - ((double) remainingTokens / producedTokens)) * 0.5;
   }
 
-  public static double computeBehavioralAppropriateness(EventLog eventLog, PetriNet petriNet) {
-    double numeratorSum = eventLog.getTraces().stream().mapToDouble(i -> i.totalTraces * (petriNet.transitionCount - ((double) i.numberFirings / i.numberIterations))).sum();
+  public static double computeBehavioralAppropriateness(EventLog eventLog) {
+    double numeratorSum = eventLog.getTraces().stream().mapToDouble(i -> i.totalTraces * (petriNet.getTransitionCount() - ((double) i.numberFirings / i.numberIterations))).sum();
     int computeSum = eventLog.getTraces().stream().mapToInt(i -> i.totalTraces).sum();
-    double denominator = (petriNet.transitionCount - 1) * computeSum;
+    double denominator = (petriNet.getTransitionCount() - 1) * computeSum;
     return numeratorSum / denominator;
   }
 
-  public static double computeSimpleStructuralAppropriateness(EventLog eventLog, PetriNet petriNet) {
-    return (double) (petriNet.labelCount + 2) / (petriNet.placeCount + petriNet.transitionCount);
+  public static double computeSimpleStructuralAppropriateness(EventLog eventLog) {
+    return (double) (petriNet.getLabelCount() + 2) / (petriNet.getPlaceCount() + petriNet.getTransitionCount());
   }
 }
 

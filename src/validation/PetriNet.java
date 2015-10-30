@@ -10,12 +10,33 @@ import java.util.stream.Collectors;
  */
 public class PetriNet {
 
-  public int placeCount;
-  public int transitionCount;
-  public int labelCount;
+  private int placeCount;
 
-  public PlaceObject startingPlace;
-  public PlaceObject endingPlace;
+  public int getPlaceCount() {
+    return placeCount;
+  }
+
+  public int getTransitionCount() {
+    return transitionCount;
+  }
+
+  public int getLabelCount() {
+    return labelCount;
+  }
+
+  private int transitionCount;
+  private int labelCount;
+
+  private PlaceObject startingPlace;
+  private PlaceObject endingPlace;
+
+  public PetriNet(int placeCount, int transitionCount, int labelCount, PlaceObject startingPlace, PlaceObject endingPlace){
+    this.placeCount = placeCount;
+    this.transitionCount = transitionCount;
+    this.labelCount = labelCount;
+    this.startingPlace = startingPlace;
+    this.endingPlace = endingPlace;
+  }
 
   public void iterateTrace(Trace trace) {
     if (this.startingPlace == null) {
