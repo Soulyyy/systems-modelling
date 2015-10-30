@@ -5,9 +5,9 @@ package validation;
  */
 public class Token {
 
-  boolean activated = false;
+  private boolean activated = false;
   public int id = 0;
-  public int count;
+  private int count;
 
   public Token(int id) {
     this.id = id;

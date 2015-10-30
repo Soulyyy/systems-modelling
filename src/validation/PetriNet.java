@@ -96,7 +96,7 @@ public class PetriNet {
         trace.missingTokens++;
       }
     }
-    if (this.endingPlace.token.activated) {
+    if (this.endingPlace.token.isActivated()) {
       trace.producedTokens++;
       trace.consumedTokens++;
     }
