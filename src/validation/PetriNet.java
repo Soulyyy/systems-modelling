@@ -101,7 +101,7 @@ public class PetriNet {
   @Override
   public String toString() {
     String resp = "";
-
+    return resp;
   }
 
 }
