@@ -13,8 +13,8 @@ public class Trace {
   protected int consumedTokens;
   protected int producedTokens;
 
-  protected int numberIterations;
-  protected int numberFirings;
+  protected int iterationsNumber;
+  protected int firingsNumber;
   protected List<Event> events;
 
   public Trace(List<Event> events) {

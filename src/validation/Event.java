@@ -8,15 +8,21 @@ import java.util.Map;
  */
 public class Event {
 
-  String name;
-  Map<String,String> attributes;
-  Date timestamp;
+  private String name;
 
-    public Event(String name, Date timestamp, Map<String,String> attributes){
-        this.name = name;
-        this.timestamp = timestamp;
-        this.attributes = attributes;
-    }
+  //Added due to definition, not used in petri net, thus not mapped
+  private Map<String, String> attributes;
+  private Date timestamp;
+
+  public Event(String name, Date timestamp, Map<String, String> attributes) {
+    this.name = name;
+    this.timestamp = timestamp;
+    this.attributes = attributes;
+  }
+
+  public String getName() {
+    return name;
+  }
 
   @Override
   public String toString() {

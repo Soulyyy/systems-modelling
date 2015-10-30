@@ -20,6 +20,7 @@ public class Case {
     return trace;
   }
 
+  @Override
   public String toString() {
     return "Case {"+
         "id="+id+

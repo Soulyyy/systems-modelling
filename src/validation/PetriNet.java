@@ -12,17 +12,6 @@ public class PetriNet {
 
   private int placeCount;
 
-  public int getPlaceCount() {
-    return placeCount;
-  }
-
-  public int getTransitionCount() {
-    return transitionCount;
-  }
-
-  public int getLabelCount() {
-    return labelCount;
-  }
 
   private int transitionCount;
   private int labelCount;
@@ -36,6 +25,18 @@ public class PetriNet {
     this.labelCount = labelCount;
     this.startingPlace = startingPlace;
     this.endingPlace = endingPlace;
+  }
+
+  public int getPlaceCount() {
+    return placeCount;
+  }
+
+  public int getTransitionCount() {
+    return transitionCount;
+  }
+
+  public int getLabelCount() {
+    return labelCount;
   }
 
   public void iterateTrace(Trace trace) {
@@ -57,9 +58,9 @@ public class PetriNet {
         boolean doubleBreak = false;
         for (TransitionObject transition : cur.outTransitions) {
           //want name check first, easier to do
-          if (transition.name.equals(event.name) && transition.inPlaces.stream().allMatch(i -> i.token.isActivated())) {
-            trace.numberFirings += cur.outTransitions.size();
-            trace.numberIterations++;
+          if (transition.name.equals(event.getName()) && transition.inPlaces.stream().allMatch(i -> i.token.isActivated())) {
+            trace.firingsNumber += cur.outTransitions.size();
+            trace.iterationsNumber++;
             found = true;
             //consume all input tokens
             transition.inPlaces.stream().forEach(i -> i.token.consumeToken());
@@ -77,7 +78,7 @@ public class PetriNet {
             tokens.add(token);
             //transition.outPlaces.stream().forEach(i -> i.token = token);
             //Clean up current places
-            placeObjects = placeObjects.stream().filter(PlaceObject::canFire).collect(Collectors.toList());
+            placeObjects = placeObjects.stream().filter(i -> i.token.isActivated()).collect(Collectors.toList());
             //Can collect fired nodes before
             placeObjects.addAll(transition.outPlaces);
             //hack to break out of 2 loops

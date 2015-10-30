@@ -8,7 +8,6 @@ import java.util.List;
  */
 public class PlaceObject {
 
-  public int tokenCount;
   private String name;
 
   public Token token;
@@ -21,7 +20,6 @@ public class PlaceObject {
     this.name = name;
     this.inTransitions = new ArrayList<>();
     this.outTransitions = new ArrayList<>();
-    this.tokenCount = 0;
   }
 
   public void addInTransition(TransitionObject transition) {
@@ -30,10 +28,6 @@ public class PlaceObject {
 
   public void addOutTransition(TransitionObject transitionObject) {
     this.outTransitions.add(transitionObject);
-  }
-
-  public boolean canFire() {
-    return tokenCount >= 1;
   }
 
   @Override

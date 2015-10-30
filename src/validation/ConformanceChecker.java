@@ -196,7 +196,7 @@ public class ConformanceChecker {
   }
 
   public static double computeBehavioralAppropriateness(EventLog eventLog) {
-    double numeratorSum = eventLog.getTraces().stream().mapToDouble(i -> i.totalTraces * (petriNet.getTransitionCount() - ((double) i.numberFirings / i.numberIterations))).sum();
+    double numeratorSum = eventLog.getTraces().stream().mapToDouble(i -> i.totalTraces * (petriNet.getTransitionCount() - ((double) i.firingsNumber / i.iterationsNumber))).sum();
     int computeSum = eventLog.getTraces().stream().mapToInt(i -> i.totalTraces).sum();
     double denominator = (petriNet.getTransitionCount() - 1) * computeSum;
     return numeratorSum / denominator;

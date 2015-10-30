@@ -29,6 +29,13 @@ public class Token {
     return activated;
   }
 
+  public void incrementCount() {
+    count++;
+    if(count >= 1) {
+      activated = true;
+    }
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) return true;
@@ -41,12 +48,6 @@ public class Token {
     return true;
   }
 
-  public void incrementCount() {
-    count++;
-    if(count >= 1) {
-      activated = true;
-    }
-  }
 
   @Override
   public int hashCode() {
