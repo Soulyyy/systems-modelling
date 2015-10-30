@@ -16,6 +16,8 @@ public class PetriNet {
   List<PlaceObject> places;
   Trace[] traces;
 
+  int placeCount;
+
   public PlaceObject startingPlace;
   public PlaceObject endingPlace;
 
@@ -68,6 +70,8 @@ public class PetriNet {
             found = true;
             //consume all input tokens
             transition.inPlaces.stream().forEach(i -> i.token.consumeToken());
+            //TODO does this work?
+            trace.producedTokens+=transition.inPlaces.size();
             cur.token.consumeToken();
             transition.outPlaces.stream().forEach(i -> i.token = new Token(tokenId));
             //Clean up current places
@@ -89,8 +93,15 @@ public class PetriNet {
       } else {
         trace.missingTokens++;
       }
+      trace.remainingTokens = this.placeCount - trace.producedTokens;
     }
     return trace;
+  }
+
+  @Override
+  public String toString() {
+    String resp = "";
+
   }
 
 }

@@ -15,9 +15,9 @@ public class Trace {
 
   private int id;
 
-    List<Event> events;
+  List<Event> events;
 
-  public Trace(int id, List<Event> events){
+  public Trace(int id, List<Event> events) {
     this.id = id;
     this.events = events;
   }
@@ -35,6 +35,7 @@ public class Trace {
         ", consumedTokens=" + consumedTokens +
         ", producedTokens=" + producedTokens +
         ", id=" + id +
+        "[" + events.stream().map(Object::toString).reduce((j, h) -> j + " " + h) + "]" +
         '}';
   }
 

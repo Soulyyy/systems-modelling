@@ -85,6 +85,7 @@ public class ConformanceChecker {
       Marking marking = new Marking();
       pnml.convertToNet(net, marking, new GraphLayoutConnection(net));
       Collection<Place> places = net.getPlaces();
+      petriNet.placeCount = places.size();
 
       //Helper functions
       Function<PetrinetEdge<? extends PetrinetNode, ? extends PetrinetNode>, PetrinetNode> mapInEdges = AbstractGraphEdge::getSource;

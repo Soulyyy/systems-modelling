@@ -26,4 +26,9 @@ public class Event {
     public void setTransition(TransitionObject transition) {
         this.transition = transition;
     }
+
+  @Override
+  public String toString() {
+    return name;
+  }
 }
