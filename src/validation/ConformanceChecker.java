@@ -41,8 +41,8 @@ public class ConformanceChecker {
     System.out.println(petriNet.startingPlace == petriNet.startingPlace.outTransitions.get(0).inPlaces.get(0));
     EventLog eventLog = getEventLog(args[1]);
     petriNet.mapStuff(eventLog);
-    for (Case caseObj : eventLog.getCases()) {
-      Trace trace = petriNet.iterateTrace(caseObj.getTrace());
+    for (Trace trace : eventLog.getTraces()) {
+      trace = petriNet.iterateTrace(trace);
       System.out.println(trace);
     }
 

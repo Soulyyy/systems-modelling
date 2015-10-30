@@ -14,7 +14,8 @@ public class Trace {
   public int producedTokens;
 
   List<Event> events;
-  public Trace(List<Event> events){
+
+  public Trace(List<Event> events) {
     this.events = events;
   }
 
@@ -32,5 +33,33 @@ public class Trace {
         ", consumedTokens=" + consumedTokens +
         ", producedTokens=" + producedTokens +
         '}';
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+
+    Trace trace = (Trace) o;
+
+    if (totalTraces != trace.totalTraces) return false;
+    if (missingTokens != trace.missingTokens) return false;
+    if (remainingTokens != trace.remainingTokens) return false;
+    if (consumedTokens != trace.consumedTokens) return false;
+    if (producedTokens != trace.producedTokens) return false;
+    if (events != null ? !events.equals(trace.events) : trace.events != null) return false;
+
+    return true;
+  }
+
+  @Override
+  public int hashCode() {
+    int result = totalTraces;
+    result = 31 * result + missingTokens;
+    result = 31 * result + remainingTokens;
+    result = 31 * result + consumedTokens;
+    result = 31 * result + producedTokens;
+    result = 31 * result + (events != null ? events.hashCode() : 0);
+    return result;
   }
 }
