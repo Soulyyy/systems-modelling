@@ -6,5 +6,5 @@ package validation;
 public class Event {
 
   String name;
-  Transition transition;
+  TransitionObject transition;
 }

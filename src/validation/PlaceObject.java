@@ -6,22 +6,28 @@ import java.util.List;
 /**
  * Created by Hans on 29/10/2015.
  */
-public class Place {
+public class PlaceObject {
 
   public int tokenCount;
   private String name;
 
   //These lists represent directed edges
-  List<Transition> transitions;
+  public List<TransitionObject> inTransitions;
+  public List<TransitionObject> outTransitions;
 
-  public Place(String name) {
+  public PlaceObject(String name) {
     this.name = name;
-    this.transitions = new ArrayList<>();
+    this.inTransitions = new ArrayList<>();
+    this.outTransitions = new ArrayList<>();
     this.tokenCount = 0;
   }
 
-  public void addTransition(Transition transition) {
-    this.transitions.add(transition);
+  public void addInTransition(TransitionObject transition) {
+    this.inTransitions.add(transition);
+  }
+
+  public void addOutTransition(TransitionObject transitionObject) {
+    this.outTransitions.add(transitionObject);
   }
 
   public boolean canFire() {
@@ -37,5 +43,10 @@ public class Place {
       throw new IllegalStateException("No tokens to use");
     }
     this.tokenCount--;
+  }
+
+  @Override
+  public String toString() {
+    return name;
   }
 }

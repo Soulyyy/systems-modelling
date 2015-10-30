@@ -7,10 +7,15 @@ import java.util.List;
  */
 public class PetriNet {
 
+  public
 
-  List<Transition> transitions;
-  List<Place> places;
+
+  List<TransitionObject> transitions;
+  List<PlaceObject> places;
   Trace[] traces;
+
+  public PlaceObject startingPlace;
+  public PlaceObject endingPlace;
 
   public void mapStuff(EventLog eventLog) {
     Case[] cases = eventLog.getCases();
@@ -18,7 +23,7 @@ public class PetriNet {
       Trace trace = caseObj.getTrace();
       Event[] events = trace.getEvents();
       for(Event event : events) {
-        for(Transition transition : transitions) {
+        for(TransitionObject transition : transitions) {
           if(event.transition == null && event.name != null && event.name.equals(transition.name)) {
 
           }
