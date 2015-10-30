@@ -67,6 +67,8 @@ public class PetriNet {
         for (TransitionObject transition : cur.outTransitions) {
           //want name check first, easier to do
           if (transition.name.equals(event.name) && transition.inPlaces.stream().allMatch(i -> i.token.isActivated())) {
+            trace.numberFirings += cur.outTransitions.size();
+            trace.numberIterations++;
             found = true;
             //consume all input tokens
             transition.inPlaces.stream().forEach(i -> i.token.consumeToken());

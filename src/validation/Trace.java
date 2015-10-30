@@ -13,6 +13,8 @@ public class Trace {
   public int consumedTokens;
   public int producedTokens;
 
+  public int numberIterations;
+  public int numberFirings;
   List<Event> events;
 
   public Trace(List<Event> events) {
