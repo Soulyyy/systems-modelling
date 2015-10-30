@@ -17,7 +17,7 @@ public class PetriNet {
   public PlaceObject startingPlace;
   public PlaceObject endingPlace;
 
-  public Trace iterateTrace(Trace trace) {
+  public void iterateTrace(Trace trace) {
     if (this.startingPlace == null) {
       System.out.println("No starting place set, cannot execute");
       System.exit(1);
@@ -45,8 +45,16 @@ public class PetriNet {
             trace.producedTokens += transition.inPlaces.size();
             cur.token.consumeToken();
             Token token = new Token(tokenId);
+            for(PlaceObject placeObject : transition.outPlaces) {
+              if(placeObject.token != null && placeObject.token.id == tokenId) {
+                placeObject.token.incrementCount();
+                token = placeObject.token;
+              } else {
+                placeObject.token = token;
+              }
+            }
             tokens.add(token);
-            transition.outPlaces.stream().forEach(i -> i.token = token);
+            //transition.outPlaces.stream().forEach(i -> i.token = token);
             //Clean up current places
             placeObjects = placeObjects.stream().filter(PlaceObject::canFire).collect(Collectors.toList());
             //Can collect fired nodes before
@@ -74,7 +82,6 @@ public class PetriNet {
     endingPlace.token.consumeToken();
     trace.remainingTokens = (int) tokens.stream().filter(Token::isActivated).count();
     //trace.remainingTokens = this.placeCount - trace.producedTokens;
-    return trace;
   }
 
 }

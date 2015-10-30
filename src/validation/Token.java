@@ -7,16 +7,22 @@ public class Token {
 
   boolean activated = false;
   public int id = 0;
+  public int count;
 
   public Token(int id) {
     this.id = id;
     this.activated = true;
+    this.count = 0;
   }
 
   public boolean consumeToken() {
-    boolean resp = activated;
-    activated = false;
-    return resp;
+    if (count >= 1) {
+      count--;
+      return activated;
+    } else {
+      activated = false;
+      return false;
+    }
   }
 
   public boolean isActivated() {
@@ -33,6 +39,13 @@ public class Token {
     if (id != token.id) return false;
 
     return true;
+  }
+
+  public void incrementCount() {
+    count++;
+    if(count >= 1) {
+      activated = true;
+    }
   }
 
   @Override

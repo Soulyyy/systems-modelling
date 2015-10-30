@@ -37,12 +37,12 @@ public class ConformanceChecker {
     EventLog eventLog = getEventLog(args[1]);
 
     for (Trace trace : eventLog.getTraces()) {
-      trace = petriNet.iterateTrace(trace);
+      petriNet.iterateTrace(trace);
     }
 
     System.out.println("Fitness: " + computeFitness(eventLog));
-    System.out.println("Simple Behavioral Appropriateness: " +computeBehavioralAppropriateness(eventLog, petriNet));
-    System.out.println("Simple Structural Appropriateness: " +computeSimpleStructuralAppropriateness(eventLog, petriNet));
+    System.out.println("Simple Behavioral Appropriateness: " + computeBehavioralAppropriateness(eventLog, petriNet));
+    System.out.println("Simple Structural Appropriateness: " + computeSimpleStructuralAppropriateness(eventLog, petriNet));
   }
 
 
