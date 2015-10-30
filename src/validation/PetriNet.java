@@ -16,15 +16,15 @@ public class PetriNet {
   private int transitionCount;
   private int labelCount;
 
-  private PlaceObject startingPlace;
-  private PlaceObject endingPlace;
+  private PlaceObject startPlace;
+  private PlaceObject endPlace;
 
   public PetriNet(int placeCount, int transitionCount, int labelCount, PlaceObject startingPlace, PlaceObject endingPlace){
     this.placeCount = placeCount;
     this.transitionCount = transitionCount;
     this.labelCount = labelCount;
-    this.startingPlace = startingPlace;
-    this.endingPlace = endingPlace;
+    this.startPlace = startingPlace;
+    this.endPlace = endingPlace;
   }
 
   public int getPlaceCount() {
@@ -40,18 +40,18 @@ public class PetriNet {
   }
 
   public void iterateTrace(Trace trace) {
-    if (this.startingPlace == null) {
+    if (this.startPlace == null) {
       System.out.println("No starting place set, cannot execute");
       System.exit(1);
     }
-    int tokenId = this.startingPlace.token != null ? this.startingPlace.token.id + 1 : 0;
-    this.startingPlace.token = new Token(tokenId);
+    int tokenId = this.startPlace.token != null ? this.startPlace.token.id + 1 : 0;
+    this.startPlace.token = new Token(tokenId);
 
     List<Token> tokens = new LinkedList<>();
     List<Event> events = trace.events;
     //We initialize with starting place
     List<PlaceObject> placeObjects = new ArrayList<>();
-    placeObjects.add(this.startingPlace);
+    placeObjects.add(this.startPlace);
     for (Event event : events) {
       boolean found = false;
       for (PlaceObject cur : placeObjects) {
@@ -97,11 +97,11 @@ public class PetriNet {
         trace.missingTokens++;
       }
     }
-    if (this.endingPlace.token.isActivated()) {
+    if (this.endPlace.token.isActivated()) {
       trace.producedTokens++;
       trace.consumedTokens++;
     }
-    endingPlace.token.consumeToken();
+    endPlace.token.consumeToken();
     trace.remainingTokens = (int) tokens.stream().filter(Token::isActivated).count();
     //trace.remainingTokens = this.placeCount - trace.producedTokens;
   }

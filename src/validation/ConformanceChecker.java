@@ -43,9 +43,9 @@ public class ConformanceChecker {
       petriNet.iterateTrace(trace);
     }
 
-    System.out.println("Fitness: " + computeFitness(eventLog));
-    System.out.println("Simple Behavioral Appropriateness: " +computeBehavioralAppropriateness(eventLog));
-    System.out.println("Simple Structural Appropriateness: " +computeSimpleStructuralAppropriateness(eventLog));
+    System.out.println("Fitness: " + computeFitness());
+    System.out.println("Simple Behavioral Appropriateness: " +computeBehavioralAppropriateness());
+    System.out.println("Simple Structural Appropriateness: " +computeSimpleStructuralAppropriateness());
   }
 
 
@@ -151,6 +151,7 @@ public class ConformanceChecker {
   }
 
   public static EventLog getEventLog(String inputFile) {
+
     Map<String, Trace> traces = new HashMap<>();
     List<Case> cases = new ArrayList<>();
     try {
@@ -186,7 +187,7 @@ public class ConformanceChecker {
     return new EventLog(cases);
   }
 
-  public static double computeFitness(EventLog eventLog) {
+  public static double computeFitness() {
     List<Trace> traces = eventLog.getTraces();
     int missingTokens = traces.stream().mapToInt(i -> i.totalTraces * i.missingTokens).reduce((j, h) -> j + h).getAsInt();
     int remainingTokens = traces.stream().mapToInt(i -> i.totalTraces * i.remainingTokens).reduce((j, h) -> j + h).getAsInt();
@@ -195,14 +196,14 @@ public class ConformanceChecker {
     return (1 - ((double) missingTokens / consumedTokens)) * 0.5 + (1 - ((double) remainingTokens / producedTokens)) * 0.5;
   }
 
-  public static double computeBehavioralAppropriateness(EventLog eventLog) {
+  public static double computeBehavioralAppropriateness() {
     double numeratorSum = eventLog.getTraces().stream().mapToDouble(i -> i.totalTraces * (petriNet.getTransitionCount() - ((double) i.firingsNumber / i.iterationsNumber))).sum();
     int computeSum = eventLog.getTraces().stream().mapToInt(i -> i.totalTraces).sum();
     double denominator = (petriNet.getTransitionCount() - 1) * computeSum;
     return numeratorSum / denominator;
   }
 
-  public static double computeSimpleStructuralAppropriateness(EventLog eventLog) {
+  public static double computeSimpleStructuralAppropriateness() {
     return (double) (petriNet.getLabelCount() + 2) / (petriNet.getPlaceCount() + petriNet.getTransitionCount());
   }
 }
