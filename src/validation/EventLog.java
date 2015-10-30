@@ -1,8 +1,6 @@
 package validation;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -21,9 +19,10 @@ public class EventLog {
   }
 
   public List<Trace> getTraces() {
-    Set<Trace> traceSet = new HashSet<>();
-    cases.stream().forEach(i -> traceSet.add(i.getTrace()));
-    return traceSet.stream().collect(Collectors.toList());
+    Map<Trace, Integer> traceMap = new HashMap<>();
+    cases.forEach(i -> traceMap.put(i.getTrace(), traceMap.get(i.getTrace())== null ? 1 : traceMap.get(i.getTrace())+1));
+    traceMap.forEach((i,j) -> i.totalTraces = j);
+    return traceMap.keySet().stream().collect(Collectors.toList());
 
   }
 }

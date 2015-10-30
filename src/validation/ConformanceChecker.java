@@ -9,6 +9,7 @@ import org.deckfour.xes.model.XLog;
 import org.deckfour.xes.model.XTrace;
 import org.processmining.models.connections.GraphLayoutConnection;
 import org.processmining.models.graphbased.AbstractGraphEdge;
+import org.processmining.models.graphbased.AbstractGraphElement;
 import org.processmining.models.graphbased.directed.petrinet.PetrinetEdge;
 import org.processmining.models.graphbased.directed.petrinet.PetrinetGraph;
 import org.processmining.models.graphbased.directed.petrinet.PetrinetNode;
@@ -37,7 +38,7 @@ public class ConformanceChecker {
   public static void main(String[] args) {
     PetriNet petriNet = getPetriNet(args[0]);
     //Sanity checks, whether we are dealing with same objects
-    petriNet.startingPlace.outTransitions.stream().forEach(i -> i.inPlaces.stream().forEach(System.out::println));
+    //petriNet.startingPlace.outTransitions.stream().forEach(i -> i.inPlaces.stream().forEach(System.out::println));
     System.out.println(petriNet.startingPlace == petriNet.startingPlace.outTransitions.get(0).inPlaces.get(0));
     EventLog eventLog = getEventLog(args[1]);
     petriNet.mapStuff(eventLog);
@@ -45,6 +46,9 @@ public class ConformanceChecker {
       trace = petriNet.iterateTrace(trace);
       System.out.println(trace);
     }
+    System.out.println(computeFitness(eventLog.getTraces()));
+    System.out.println(computeBehavioralAppropriateness(eventLog, petriNet));
+    //petriNet.startingPlace.outTransitions.stream().forEach(i -> i.outPlaces.stream().forEach(j -> j.outTransitions.forEach(h -> h.outPlaces.forEach(t -> t.outTransitions.forEach(u -> u.outPlaces.forEach(o -> o.outTransitions.forEach(p -> p.outPlaces.forEach(System.out::println))))))));
 
     /*traces = Arrays.stream(eventLog.getCases()).map(Case::getTrace).collect(Collectors.toList());*/
   }
@@ -86,6 +90,8 @@ public class ConformanceChecker {
       pnml.convertToNet(net, marking, new GraphLayoutConnection(net));
       Collection<Place> places = net.getPlaces();
       petriNet.placeCount = places.size();
+      petriNet.transitionCount = net.getTransitions().size();
+      petriNet.labelCount = net.getTransitions().stream().map(AbstractGraphElement::getLabel).collect(Collectors.toSet()).size();
 
       //Helper functions
       Function<PetrinetEdge<? extends PetrinetNode, ? extends PetrinetNode>, PetrinetNode> mapInEdges = AbstractGraphEdge::getSource;
@@ -97,7 +103,6 @@ public class ConformanceChecker {
       HashMap<String, TransitionObject> transitionObjectCache = new HashMap<>();
 
       for (Place place : places) {
-
         PlaceObject placeObject = new PlaceObject(place.getLabel());
 
         Collection<PetrinetEdge<? extends PetrinetNode, ? extends PetrinetNode>> inEdges = net.getInEdges(place);
@@ -106,7 +111,6 @@ public class ConformanceChecker {
         //Map edges to Vertices
         List<Transition> inVertices = inEdges.stream().map(mapInEdges::apply).map(nodeTransitionFunction::apply).collect(Collectors.toList());
         List<Transition> outVertices = outEdges.stream().map(mapOutEdges::apply).map(nodeTransitionFunction::apply).collect(Collectors.toList());
-
 
         //Transform to our Transitions with only names
         List<TransitionObject> inTransitions = inVertices.stream().map(mapTransitions::apply).collect(Collectors.toList());
@@ -187,7 +191,7 @@ public class ConformanceChecker {
           }
           events.add(new Event(activityName, timestamp, eventAttrs));
         }
-        if(traces.get(traceAbr) == null){
+        if (traces.get(traceAbr) == null) {
           traces.put(traceAbr, new Trace(events));
         }
         cases.add(new Case(Integer.parseInt(traceName), traces.get(traceAbr), caseAttrs));
@@ -205,6 +209,18 @@ public class ConformanceChecker {
     int consumedTokens = traces.stream().mapToInt(i -> i.totalTraces * i.consumedTokens).reduce((j, h) -> j + h).getAsInt();
     int producedTokens = traces.stream().mapToInt(i -> i.totalTraces * i.producedTokens).reduce((j, h) -> j + h).getAsInt();
     return (1 - ((double) missingTokens / consumedTokens)) * 0.5 + (1 - ((double) remainingTokens / producedTokens)) * 0.5;
+  }
+
+  public static double computeBehavioralAppropriateness(EventLog eventLog, PetriNet petriNet) {
+    System.out.println(petriNet.transitionCount);
+    int computeSum = eventLog.getTraces().stream().mapToInt(i -> i.totalTraces).sum();
+    double numerator = computeSum * (petriNet.transitionCount - ((double) computeSum / eventLog.getTraces().size()));
+    double denominator = (petriNet.transitionCount - 1) * computeSum;
+    return numerator / denominator;
+  }
+
+  public static double computeSimpleStructuralAppropriateness(EventLog eventLog, PetriNet petriNet) {
+    return 0;
   }
 }
 
