@@ -11,6 +11,8 @@ public class PlaceObject {
   public int tokenCount;
   private String name;
 
+  public Token token;
+
   //These lists represent directed edges
   public List<TransitionObject> inTransitions;
   public List<TransitionObject> outTransitions;

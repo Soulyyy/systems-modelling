@@ -7,11 +7,11 @@ import java.util.List;
  */
 public class Trace {
 
-  private int totalTraces;
-  private int missingTokens;
-  private int remainingTokens;
-  private int consumedTokens;
-  private int producedTokens;
+  public int totalTraces;
+  public int missingTokens;
+  public int remainingTokens;
+  public int consumedTokens;
+  public int producedTokens;
 
   private int id;
 
@@ -25,4 +25,17 @@ public class Trace {
   public List<Event> getEvents() {
     return events;
   }
+
+  @Override
+  public String toString() {
+    return "Trace{" +
+        "totalTraces=" + totalTraces +
+        ", missingTokens=" + missingTokens +
+        ", remainingTokens=" + remainingTokens +
+        ", consumedTokens=" + consumedTokens +
+        ", producedTokens=" + producedTokens +
+        ", id=" + id +
+        '}';
+  }
+
 }

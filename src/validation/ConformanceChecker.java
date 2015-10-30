@@ -41,23 +41,18 @@ public class ConformanceChecker {
     System.out.println(petriNet.startingPlace == petriNet.startingPlace.outTransitions.get(0).inPlaces.get(0));
     EventLog eventLog = getEventLog(args[1]);
     petriNet.mapStuff(eventLog);
+    for (Case caseObj : eventLog.getCases()) {
+      Trace trace = petriNet.iterateTrace(caseObj.getTrace());
+      System.out.println(trace);
+    }
 
     /*traces = Arrays.stream(eventLog.getCases()).map(Case::getTrace).collect(Collectors.toList());*/
   }
 
-  public static LogResult recursiveMethod() {
-    Map<Trace, LogResult> traceLogResultMap = new HashMap<>();
-    for (Trace trace : traces) {
-      //Tell me what comes back
-      LogResult logResult = petriNet.iterate(trace);
-      traceLogResultMap.put(trace, logResult);
-    }
-    if (true) {
-      //OR map?
-      return new LogResult();
-    }
-    recursiveMethod();
-    return new LogResult();
+  public static void traverseNet(PetriNet net, Trace trace) {
+    net.iterate(trace);
+    System.out.println(trace.consumedTokens);
+    System.out.println(trace.missingTokens);
   }
 
   public static String calculateConformance() {
@@ -156,9 +151,12 @@ public class ConformanceChecker {
         }
 
       }
+      //All nodes have hit cache, so we can do this
+      petriNet.transitions = transitionObjectCache.values().stream().collect(Collectors.toList());
     } catch (Exception e) {
       e.printStackTrace();
     }
+
     return petriNet;
   }
 
@@ -195,6 +193,14 @@ public class ConformanceChecker {
       e.printStackTrace();
     }
     return new EventLog(cases);
+  }
+
+  public static double computeFitness(List<Trace> traces) {
+    int missingTokens = traces.stream().mapToInt(i -> i.totalTraces * i.missingTokens).reduce((j, h) -> j + h).getAsInt();
+    int remainingTokens = traces.stream().mapToInt(i -> i.totalTraces * i.remainingTokens).reduce((j, h) -> j + h).getAsInt();
+    int consumedTokens = traces.stream().mapToInt(i -> i.totalTraces * i.consumedTokens).reduce((j, h) -> j + h).getAsInt();
+    int producedTokens = traces.stream().mapToInt(i -> i.totalTraces * i.producedTokens).reduce((j, h) -> j + h).getAsInt();
+    return (1 - ((double) missingTokens / consumedTokens)) * 0.5 + (1 - ((double) remainingTokens / producedTokens)) * 0.5;
   }
 }
 

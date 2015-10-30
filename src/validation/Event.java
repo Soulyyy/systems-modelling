@@ -1,6 +1,5 @@
 package validation;
 
-import java.security.Timestamp;
 import java.util.Date;
 import java.util.Map;
 
@@ -10,10 +9,7 @@ import java.util.Map;
 public class Event {
 
   String name;
-<<<<<<< HEAD
   TransitionObject transition;
-=======
-  Transition transition;
   Map<String,String> attributes;
   Date timestamp;
 
@@ -23,12 +19,11 @@ public class Event {
         this.attributes = attributes;
     }
 
-    public Transition getTransition() {
+    public TransitionObject getTransition() {
         return transition;
     }
 
-    public void setTransition(Transition transition) {
+    public void setTransition(TransitionObject transition) {
         this.transition = transition;
     }
->>>>>>> b99eefef4a1b563a6b0548db299adf7594db985e
 }
